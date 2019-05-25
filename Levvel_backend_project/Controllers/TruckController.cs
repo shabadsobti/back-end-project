@@ -29,7 +29,8 @@ namespace Levvel_backend_project.Controllers
                     p => new
                     {
                         name = p.CategoryName
-                    })
+                    }),
+                location = u.Location
 
             });
             return Ok(response);

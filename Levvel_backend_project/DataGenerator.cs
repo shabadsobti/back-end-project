@@ -23,7 +23,16 @@ namespace Levvel_backend_project
                 var truck1 = new Truck
                 {
                     TruckId = 1,
-                    Title = "Candy Land"
+                    Title = "Candy Land",
+                    Location = new Address
+                    {
+                        Street = "852 West Main", 
+                        City = "Cville",
+                        State = "VA",
+                        Country = "USA",
+                        Zip = "22903"
+
+                    }
                 };
 
 
