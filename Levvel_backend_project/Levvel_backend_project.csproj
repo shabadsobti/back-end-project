@@ -13,4 +13,9 @@
   <ItemGroup>
     <Folder Include="Models\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\IHttpActionResult.cs" />
+    <Compile Remove="Models\ITruckRepository.cs" />
+    <Compile Remove="Models\IProductRepository.cs" />
+  </ItemGroup>
 </Project>
