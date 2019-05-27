@@ -19,7 +19,6 @@ namespace Levvel_backend_project
                     return;   // Data was already seeded
                 }
 
-
                 var truck1 = new Truck
                 {
                     //TruckId = 1,
