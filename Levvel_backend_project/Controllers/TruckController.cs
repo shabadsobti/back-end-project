@@ -84,7 +84,7 @@ namespace Levvel_backend_project.Controllers
                 .Where(r => r.Rating == rating)
                 .Where(x => x.TruckCategory
                 .Any(r => r.Category.CategoryName.Equals(category)));
-   
+
             var response = trucks.Select(u => new
             {
                 title = u.Title,
@@ -105,53 +105,69 @@ namespace Levvel_backend_project.Controllers
         }
 
 
-            [HttpPost]
-            public async Task<IActionResult> CreateTruck(AddTruckResource model)
+        [HttpPost]
+        public async Task<IActionResult> CreateTruck(AddTruckResource model)
+        {
+            var truck = _mapper.Map<Truck>(model);
+            _context.Trucks.Add(truck);
+            await _context.SaveChangesAsync();
+
+            List<string> category_names = new List<string>();
+
+
+            foreach (var cr in model.Categories)
             {
-                var truck = _mapper.Map<Truck>(model);
-                _context.Trucks.Add(truck);
-                await _context.SaveChangesAsync();
-
-                List<string> category_names = new List<string>();
-
-
-                foreach (var cr in model.Categories)
+                var category = new Category
                 {
-                    var category = new Category
-                    {
-                        CategoryName = cr.CategoryName
-                    };
-
-
-                    category_names.Add(cr.CategoryName);
-                    _context.Categories.Add(category);
-                    _context.TruckCategories.Add(new TruckCategory
-                    {
-                        TruckId = truck.TruckId,
-                        Category = category
-                    });
+                    CategoryName = cr.CategoryName
                 };
 
-                var resp = new
+
+                category_names.Add(cr.CategoryName);
+                _context.SaveChanges();
+
+                _context.Categories.Add(category);
+                _context.TruckCategories.Add(new TruckCategory
                 {
-                    title = truck.Title,
-                    price = truck.Price,
-                    rating = truck.Rating,
-                    hours = truck.Hours,
-                    phone = truck.Phone,
-                    categories = category_names,
-                    coordinates = truck.Coordinates,
-                    location = truck.Location
+                    TruckId = truck.TruckId,
+                    Category = category
+                });
 
-                };
-                return Ok(resp);
+                _context.SaveChanges();
 
-            }
+                _context.Audits.Add(new Audit
+                {
+                    TruckId = truck.TruckId,
+                    TypeOfOperation = "POST",
+                    Timestamp = DateTime.Now
+
+                });
+                _context.SaveChanges();
+
+            };
+
+            var resp = new
+            {
+                title = truck.Title,
+                price = truck.Price,
+                rating = truck.Rating,
+                hours = truck.Hours,
+                phone = truck.Phone,
+                categories = category_names,
+                coordinates = truck.Coordinates,
+                location = truck.Location
+
+            };
+            return Ok(resp);
+
+        }
 
         [HttpPut("{id}")]
         public string UpdateTruck(int id, [FromBody]JObject data)
         {
             var truck = _context.Trucks.Find(id);
+            var oldHours = truck.Hours;
+            var oldLocation = truck.Location;
 
             String hours = data["hours"].ToString();
             Address location = data["location"].ToObject<Address>();
@@ -161,28 +177,49 @@ namespace Levvel_backend_project.Controllers
 
             _context.SaveChanges();
 
+            _context.Audits.Add(new Audit
+            {
+                TruckId = truck.TruckId,
+                TypeOfOperation = "UPDATE",
+                InitialHours = oldHours,
+                UpdatedHours = hours,
+                InitialLocation = oldLocation,
+                UpdatedLocation = location,
+                Timestamp = DateTime.Now
+            });
+            _context.SaveChanges();
+
             return "Done";
-           
+
         }
 
 
         // DELETE: api/Truck/5
         [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteTodoItem(int id)
+        public async Task<IActionResult> DeleteTodoItem(int id)
+        {
+            var truckItem = await _context.Trucks.FindAsync(id);
+
+            if (truckItem == null)
             {
-                var truckItem = await _context.Trucks.FindAsync(id);
-
-                if (truckItem == null)
-                {
-                    return NotFound();
-                }
-
-                _context.Trucks.Remove(truckItem);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
+                return NotFound();
             }
+
+            var truckId = truckItem.TruckId;
+            _context.Trucks.Remove(truckItem);
+            await _context.SaveChangesAsync();
+
+            _context.Add(new Audit
+            {
+                TruckId = truckId,
+                TypeOfOperation = "DELETE",
+                Timestamp = DateTime.Now
+            });
+            _context.SaveChanges();
+
+            return NoContent();
         }
     }
+}
 
 

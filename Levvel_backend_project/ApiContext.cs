@@ -16,8 +16,11 @@ namespace Levvel_backend_project
         public DbSet<Category> Categories { get; set; }
         public DbSet<TruckCategory> TruckCategories { get; set; }
 
+        public DbSet<Audit> Audits { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             modelBuilder.Entity<TruckCategory>()
            .HasKey(e => new { e.TruckId, e.CategoryId });
 
@@ -30,6 +33,9 @@ namespace Levvel_backend_project
             .HasOne(e => e.Category)
             .WithMany(p => p.TruckCategory)
             .HasForeignKey(a => a.CategoryId);
+
+            modelBuilder.Entity<Audit>()
+            .HasKey(o => o.AuditId);
         }
     }
 }
