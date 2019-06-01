@@ -19,6 +19,7 @@ namespace Levvel_backend_project.Models
 
 
         public virtual ICollection<TruckCategory> TruckCategory { get; set; }
+        public IList<CustomerTrucks> CustomerTrucks { get; set; }
     }
 
     [Owned]

@@ -5,7 +5,6 @@ namespace Levvel_backend_project.Models
 {
     public class Audit
     {
-        [Key]
         public int AuditId { get; set; }
         public DateTime Timestamp { get; set; }
         public String TypeOfOperation { get; set; }

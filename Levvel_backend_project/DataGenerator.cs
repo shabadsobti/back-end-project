@@ -116,7 +116,7 @@ namespace Levvel_backend_project
                     //TruckId = 2
                 });
 
-                context.SaveChanges();
+                //context.SaveChanges();
             }
         }
     }

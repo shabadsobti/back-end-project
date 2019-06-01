@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Levvel_backend_project.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class TruckController : ControllerBase
@@ -28,6 +30,7 @@ namespace Levvel_backend_project.Controllers
             var trucks = _context.Trucks.Include(u => u.TruckCategory);
             var response = trucks.Select(u => new
             {
+                id = u.TruckId,
                 title = u.Title,
                 price = u.Price,
                 rating = u.Rating,
@@ -63,6 +66,7 @@ namespace Levvel_backend_project.Controllers
             var truck = t.FirstOrDefault((p => p.TruckId == id));
             var resp = new
             {
+                id = truck.TruckId,
                 title = truck.Title,
                 price = truck.Price,
                 rating = truck.Rating,
@@ -87,6 +91,7 @@ namespace Levvel_backend_project.Controllers
 
             var response = trucks.Select(u => new
             {
+                id = u.TruckId,
                 title = u.Title,
                 price = u.Price,
                 rating = u.Rating,
@@ -111,49 +116,17 @@ namespace Levvel_backend_project.Controllers
             var truck = _mapper.Map<Truck>(model);
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync();
-
-            List<string> category_names = new List<string>();
-
-
-            foreach (var cr in model.Categories)
-            {
-                var category = new Category
-                {
-                    CategoryName = cr.CategoryName
-                };
-
-
-                category_names.Add(cr.CategoryName);
-                _context.SaveChanges();
-
-                _context.Categories.Add(category);
-                _context.TruckCategories.Add(new TruckCategory
-                {
-                    TruckId = truck.TruckId,
-                    Category = category
-                });
-
-                _context.SaveChanges();
-
-                _context.Audits.Add(new Audit
-                {
-                    TruckId = truck.TruckId,
-                    TypeOfOperation = "POST",
-                    Timestamp = DateTime.Now
-
-                });
-                _context.SaveChanges();
-
-            };
+    
 
             var resp = new
             {
+                id = truck.TruckId,
                 title = truck.Title,
                 price = truck.Price,
                 rating = truck.Rating,
                 hours = truck.Hours,
                 phone = truck.Phone,
-                categories = category_names,
+                categories = model.Categories,
                 coordinates = truck.Coordinates,
                 location = truck.Location
 
@@ -166,31 +139,12 @@ namespace Levvel_backend_project.Controllers
         public string UpdateTruck(int id, [FromBody]JObject data)
         {
             var truck = _context.Trucks.Find(id);
-            var oldHours = truck.Hours;
-            var oldLocation = truck.Location;
-
             String hours = data["hours"].ToString();
             Address location = data["location"].ToObject<Address>();
-
             truck.Hours = hours;
             truck.Location = location;
-
             _context.SaveChanges();
-
-            _context.Audits.Add(new Audit
-            {
-                TruckId = truck.TruckId,
-                TypeOfOperation = "UPDATE",
-                InitialHours = oldHours,
-                UpdatedHours = hours,
-                InitialLocation = oldLocation,
-                UpdatedLocation = location,
-                Timestamp = DateTime.Now
-            });
-            _context.SaveChanges();
-
             return "Done";
-
         }
 
 
@@ -208,15 +162,6 @@ namespace Levvel_backend_project.Controllers
             var truckId = truckItem.TruckId;
             _context.Trucks.Remove(truckItem);
             await _context.SaveChangesAsync();
-
-            _context.Add(new Audit
-            {
-                TruckId = truckId,
-                TypeOfOperation = "DELETE",
-                Timestamp = DateTime.Now
-            });
-            _context.SaveChanges();
-
             return NoContent();
         }
     }

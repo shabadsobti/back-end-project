@@ -18,6 +18,7 @@ namespace Levvel_backend_project.Models
 
 
         public List<CategoryResource> Categories { get; set; }
+       
 
     }
 }
