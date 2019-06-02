@@ -104,5 +104,52 @@ namespace Levvel_backend_project.Controllers
             };
             return Ok(resp);
         }
+
+
+        // GET api/dashboard/favorites
+        [HttpGet("trucks")]
+        public async Task<IActionResult> getTrucks()
+        {
+            // retrieve the user info
+            //HttpContext.User
+
+            var userId = _caller.Claims.Single(c => c.Type == "id");
+
+            var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+
+            var trucks = _appDbContext.Trucks
+            .Where(ci => ci.Created_by == customer);
+
+
+            var response = trucks.Select(u => new
+            {
+                id = u.TruckId,
+                title = u.Title,
+                price = u.Price,
+                rating = u.Rating,
+                hours = u.Hours,
+                phone = u.Phone,
+
+                categories = u.TruckCategory.Select(p => p.Category).Select(
+                    p => new
+                    {
+                        name = p.CategoryName
+                    }),
+                coordinates = u.Coordinates,
+                location = u.Location
+            });
+
+            var cs = _mapper.Map<CustomerViewModel>(customer);
+            return new OkObjectResult(new
+            {
+                customer.Id,
+                customer.Identity.FirstName,
+                customer.Identity.LastName,
+                trucks = response
+            });
+        }
+
+
+
     }
 }
