@@ -16,6 +16,7 @@ namespace Levvel_backend_project.Models
         public string Phone { get; set; }
         public Coordinates Coordinates { get; set; }
         public Address Location { get; set; }
+        public Customer Created_by { get; set; }
 
 
         public virtual ICollection<TruckCategory> TruckCategory { get; set; }

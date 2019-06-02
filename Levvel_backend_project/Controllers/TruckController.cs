@@ -9,6 +9,8 @@ using AutoMapper;
 using Levvel_backend_project.ViewModels;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace Levvel_backend_project.Controllers
 {
@@ -18,11 +20,13 @@ namespace Levvel_backend_project.Controllers
     public class TruckController : ControllerBase
     {
         private ApiContext _context;
+        private readonly ClaimsPrincipal _caller;
         private readonly IMapper _mapper;
-        public TruckController(ApiContext context, IMapper mapper)
+        public TruckController(ApiContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _caller = httpContextAccessor.HttpContext.User;
         }
 
         [HttpGet]
@@ -110,11 +114,16 @@ namespace Levvel_backend_project.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(Policy = "ApiUser")]
         [HttpPost]
         public async Task<IActionResult> CreateTruck(TruckViewModel model)
         {
+            var userId = _caller.Claims.Single(c => c.Type == "id");
+
+            var customer = await _context.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+
             var truck = _mapper.Map<Truck>(model);
+            truck.Created_by = customer;
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync();
 
@@ -143,10 +152,22 @@ namespace Levvel_backend_project.Controllers
 
         }
 
+        [Authorize(Policy = "ApiUser")]
         [HttpPut("{id}")]
-        public string UpdateTruck(int id, [FromBody]JObject data)
+        public async Task<IActionResult> UpdateTruck(int id, [FromBody]JObject data)
         {
+
+            var userId = _caller.Claims.Single(c => c.Type == "id");
+
+            var customer = await _context.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+
             var truck = _context.Trucks.Find(id);
+            if(truck.Created_by != customer)
+            {
+                //todo: Return unauthorized access
+                return NotFound();
+            }
+
             var old_hours = truck.Hours;
             var old_location = truck.Location;
             String hours = data["hours"].ToString();
@@ -169,10 +190,10 @@ namespace Levvel_backend_project.Controllers
             };
 
             _context.Audits.Add(audit);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
 
-            return "Done";
+            return Ok();
         }
 
 
@@ -180,12 +201,28 @@ namespace Levvel_backend_project.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(int id)
         {
+
+            var userId = _caller.Claims.Single(c => c.Type == "id");
+
+            var customer = await _context.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
+
+           
+
             var truckItem = await _context.Trucks.FindAsync(id);
 
             if (truckItem == null)
             {
                 return NotFound();
             }
+
+           
+            if (truckItem.Created_by != customer)
+            {
+                //todo: Return unauthorized access
+                return NotFound();
+            }
+
+
 
             var truckId = truckItem.TruckId;
             _context.Trucks.Remove(truckItem);
