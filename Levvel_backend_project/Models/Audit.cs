@@ -9,9 +9,11 @@ namespace Levvel_backend_project.Models
         public DateTime Timestamp { get; set; }
         public String TypeOfOperation { get; set; }
         public int TruckId { get; set; }
-        public string InitialHours { get; set; }
-        public string UpdatedHours { get; set; }
-        public Address InitialLocation { get; set; }
-        public Address UpdatedLocation { get; set; }
+        public string Hours { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public string Zip { get; set; }
     }
 }

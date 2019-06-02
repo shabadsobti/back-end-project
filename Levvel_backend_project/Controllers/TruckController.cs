@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Levvel_backend_project.ViewModels;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
 
@@ -111,13 +112,20 @@ namespace Levvel_backend_project.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateTruck(AddTruckResource model)
+        public async Task<IActionResult> CreateTruck(TruckViewModel model)
         {
             var truck = _mapper.Map<Truck>(model);
             _context.Trucks.Add(truck);
             await _context.SaveChangesAsync();
-    
 
+            var audit = new Audit
+            {
+                TruckId = truck.TruckId,
+                TypeOfOperation = "INSERT",
+                Timestamp = DateTime.Now
+            };
+            _context.Audits.Add(audit);
+            await _context.SaveChangesAsync();
             var resp = new
             {
                 id = truck.TruckId,
@@ -139,11 +147,31 @@ namespace Levvel_backend_project.Controllers
         public string UpdateTruck(int id, [FromBody]JObject data)
         {
             var truck = _context.Trucks.Find(id);
+            var old_hours = truck.Hours;
+            var old_location = truck.Location;
             String hours = data["hours"].ToString();
             Address location = data["location"].ToObject<Address>();
             truck.Hours = hours;
             truck.Location = location;
             _context.SaveChanges();
+
+            var audit = new Audit
+            {
+                TruckId = truck.TruckId,
+                TypeOfOperation = "UPDATE",
+                Timestamp = DateTime.Now,
+                Hours = old_hours,
+                Street = old_location.Street,
+                City = old_location.City,
+                State = old_location.State,
+                Country = old_location.Country,
+                Zip = old_location.Zip
+            };
+
+            _context.Audits.Add(audit);
+            _context.SaveChangesAsync();
+
+
             return "Done";
         }
 
@@ -162,6 +190,18 @@ namespace Levvel_backend_project.Controllers
             var truckId = truckItem.TruckId;
             _context.Trucks.Remove(truckItem);
             await _context.SaveChangesAsync();
+
+            var audit = new Audit
+            {
+                TruckId = id,
+                TypeOfOperation = "DELETE",
+                Timestamp = DateTime.Now,
+ 
+            };
+
+            _context.Audits.Add(audit);
+            await _context.SaveChangesAsync();
+
             return NoContent();
         }
     }

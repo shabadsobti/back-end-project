@@ -1,5 +1,6 @@
 ﻿using System;
 using Levvel_backend_project.Models;
+using Levvel_backend_project.ViewModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ namespace Levvel_backend_project
         public DbSet<TruckCategory> TruckCategories { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerTrucks> CustomerTrucks { get; set; }
-        //public DbSet<Audit> Audits { get; set; }
+        public DbSet<Audit> Audits { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=food_truck;Username=postgres;Password=Shabad@97");
@@ -46,13 +47,10 @@ namespace Levvel_backend_project
                 .WithMany(s => s.Favorites)
                 .HasForeignKey(sc => sc.CustomerId);
 
-
-
             builder.Entity<CustomerTrucks>()
                 .HasOne<Truck>(sc => sc.Truck)
                 .WithMany(s => s.CustomerTrucks)
                 .HasForeignKey(sc => sc.TruckId);
-
 
         }
     }

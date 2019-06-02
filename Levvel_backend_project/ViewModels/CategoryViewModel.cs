@@ -1,7 +1,7 @@
 ﻿using System;
-namespace Levvel_backend_project.Models
+namespace Levvel_backend_project.ViewModels
 {
-    public class CategoryResource
+    public class CategoryViewModel
     {
         public string CategoryName { get; set; }
     }

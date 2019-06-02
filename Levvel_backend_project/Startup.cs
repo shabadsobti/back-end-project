@@ -33,7 +33,7 @@ namespace Levvel_backend_project
 {
     public class Startup
     {
-        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkH"; // todo: get this from somewhere secure
+        private const string SecretKey = "s8*s+_e0xmwqj86uie)a3t9tc!x#7zog#s!x=(^2^u(9ib@b-+";
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(SecretKey));
         public Startup(IConfiguration configuration)
         {
@@ -111,7 +111,7 @@ namespace Levvel_backend_project
             builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
             builder.AddEntityFrameworkStores<ApiContext>().AddDefaultTokenProviders();
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

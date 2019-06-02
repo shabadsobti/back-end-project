@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Levvel_backend_project.Models;
+using Levvel_backend_project.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -46,7 +47,7 @@ namespace Levvel_backend_project.Controllers
             .Where(ci => ci.CustomerId == customer.Id)
              .Select(ci => ci.Truck);
 
-            var nc = _mapper.Map<List<AddTruckResource>>(favorites);
+            var nc = _mapper.Map<List<TruckViewModel>>(favorites);
 
             var response = favorites.Select(u => new
             {
@@ -82,12 +83,8 @@ namespace Levvel_backend_project.Controllers
         [HttpPost("favorites")]
         public async Task<IActionResult> Create([FromBody] FavoriteViewModel model)
         {
-            // retrieve the user info
-            //HttpContext.User
-            //var truckId = model.TruckId;
-
             var userId = _caller.Claims.Single(c => c.Type == "id");
-            //var myJsonObj = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(jsonString);
+          
             var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
             Truck truck = _appDbContext.Trucks.Find(model.TruckId);
             
@@ -107,6 +104,5 @@ namespace Levvel_backend_project.Controllers
             };
             return Ok(resp);
         }
-
     }
 }

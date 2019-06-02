@@ -3,15 +3,17 @@ using System;
 using Levvel_backend_project;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Levvel_backend_project.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20190602015728_Audits")]
+    partial class Audits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,15 +80,7 @@ namespace Levvel_backend_project.Migrations
                     b.Property<int>("AuditId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("City");
-
-                    b.Property<string>("Country");
-
-                    b.Property<string>("Hours");
-
-                    b.Property<string>("State");
-
-                    b.Property<string>("Street");
+                    b.Property<string>("InitialHours");
 
                     b.Property<DateTime>("Timestamp");
 
@@ -94,7 +88,7 @@ namespace Levvel_backend_project.Migrations
 
                     b.Property<string>("TypeOfOperation");
 
-                    b.Property<string>("Zip");
+                    b.Property<string>("UpdatedHours");
 
                     b.HasKey("AuditId");
 
@@ -280,6 +274,57 @@ namespace Levvel_backend_project.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Levvel_backend_project.Models.Audit", b =>
+                {
+                    b.OwnsOne("Levvel_backend_project.Models.Address", "InitialLocation", b1 =>
+                        {
+                            b1.Property<int>("AuditId");
+
+                            b1.Property<string>("City");
+
+                            b1.Property<string>("Country");
+
+                            b1.Property<string>("State");
+
+                            b1.Property<string>("Street");
+
+                            b1.Property<string>("Zip");
+
+                            b1.HasKey("AuditId");
+
+                            b1.ToTable("Audits");
+
+                            b1.HasOne("Levvel_backend_project.Models.Audit")
+                                .WithOne("InitialLocation")
+                                .HasForeignKey("Levvel_backend_project.Models.Address", "AuditId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+
+                    b.OwnsOne("Levvel_backend_project.Models.Address", "UpdatedLocation", b1 =>
+                        {
+                            b1.Property<int>("AuditId");
+
+                            b1.Property<string>("City");
+
+                            b1.Property<string>("Country");
+
+                            b1.Property<string>("State");
+
+                            b1.Property<string>("Street");
+
+                            b1.Property<string>("Zip");
+
+                            b1.HasKey("AuditId");
+
+                            b1.ToTable("Audits");
+
+                            b1.HasOne("Levvel_backend_project.Models.Audit")
+                                .WithOne("UpdatedLocation")
+                                .HasForeignKey("Levvel_backend_project.Models.Address", "AuditId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+                });
+
             modelBuilder.Entity("Levvel_backend_project.Models.Customer", b =>
                 {
                     b.HasOne("Levvel_backend_project.Models.AppUser", "Identity")
@@ -302,6 +347,24 @@ namespace Levvel_backend_project.Migrations
 
             modelBuilder.Entity("Levvel_backend_project.Models.Truck", b =>
                 {
+                    b.OwnsOne("Levvel_backend_project.Models.Coordinates", "Coordinates", b1 =>
+                        {
+                            b1.Property<int>("TruckId");
+
+                            b1.Property<decimal>("Latitude");
+
+                            b1.Property<decimal>("Longitude");
+
+                            b1.HasKey("TruckId");
+
+                            b1.ToTable("Trucks");
+
+                            b1.HasOne("Levvel_backend_project.Models.Truck")
+                                .WithOne("Coordinates")
+                                .HasForeignKey("Levvel_backend_project.Models.Coordinates", "TruckId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+
                     b.OwnsOne("Levvel_backend_project.Models.Address", "Location", b1 =>
                         {
                             b1.Property<int>("TruckId");
@@ -323,24 +386,6 @@ namespace Levvel_backend_project.Migrations
                             b1.HasOne("Levvel_backend_project.Models.Truck")
                                 .WithOne("Location")
                                 .HasForeignKey("Levvel_backend_project.Models.Address", "TruckId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
-
-                    b.OwnsOne("Levvel_backend_project.Models.Coordinates", "Coordinates", b1 =>
-                        {
-                            b1.Property<int>("TruckId");
-
-                            b1.Property<decimal>("Latitude");
-
-                            b1.Property<decimal>("Longitude");
-
-                            b1.HasKey("TruckId");
-
-                            b1.ToTable("Trucks");
-
-                            b1.HasOne("Levvel_backend_project.Models.Truck")
-                                .WithOne("Coordinates")
-                                .HasForeignKey("Levvel_backend_project.Models.Coordinates", "TruckId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });
