@@ -8,13 +8,19 @@ namespace Levvel_backend_project.ViewModels
     public class TruckViewModel
     {
         public int TruckId { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         public int Price { get; set; }
         [Range(1, 5)]
         public decimal Rating { get; set; }
+        [Required]
         public string Hours { get; set; }
+        [Required]
         public string Phone { get; set; }
+        [Required]
         public Coordinates Coordinates { get; set; }
+        [Required]
         public Address Location { get; set; }
 
 

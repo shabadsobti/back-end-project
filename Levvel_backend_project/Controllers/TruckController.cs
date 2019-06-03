@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using System.Net;
 
 namespace Levvel_backend_project.Controllers
 {
@@ -69,6 +70,11 @@ namespace Levvel_backend_project.Controllers
             };
 
             var truck = t.FirstOrDefault((p => p.TruckId == id));
+
+            if(truck == null)
+            {
+                return NotFound();
+            }
             var resp = new
             {
                 id = truck.TruckId,
@@ -122,56 +128,75 @@ namespace Levvel_backend_project.Controllers
 
             var customer = await _context.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
 
-            var truck = _mapper.Map<Truck>(model);
-            truck.Created_by = customer;
-            _context.Trucks.Add(truck);
-            await _context.SaveChangesAsync();
-
-            var audit = new Audit
+            if (ModelState.IsValid)
             {
-                TruckId = truck.TruckId,
-                TypeOfOperation = "INSERT",
-                Timestamp = DateTime.Now
-            };
-            _context.Audits.Add(audit);
-            await _context.SaveChangesAsync();
-            var resp = new
-            {
-                id = truck.TruckId,
-                title = truck.Title,
-                price = truck.Price,
-                rating = truck.Rating,
-                hours = truck.Hours,
-                phone = truck.Phone,
-                categories = model.Categories,
-                coordinates = truck.Coordinates,
-                location = truck.Location
+                var truck = _mapper.Map<Truck>(model);
+                truck.Created_by = customer;
+                _context.Trucks.Add(truck);
+                await _context.SaveChangesAsync();
 
-            };
-            return Ok(resp);
+
+                var audit = new Audit
+                {
+                    TruckId = truck.TruckId,
+                    TypeOfOperation = "INSERT",
+                    Timestamp = DateTime.Now
+                };
+                _context.Audits.Add(audit);
+                await _context.SaveChangesAsync();
+                var resp = new
+                {
+                    id = truck.TruckId,
+                    title = truck.Title,
+                    price = truck.Price,
+                    rating = truck.Rating,
+                    hours = truck.Hours,
+                    phone = truck.Phone,
+                    categories = model.Categories,
+                    coordinates = truck.Coordinates,
+                    location = truck.Location
+
+                };
+                return Ok(resp);
+            }
+            else
+            {
+                return NotFound();
+            }
+
 
         }
 
         [Authorize(Policy = "ApiUser")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTruck(int id, [FromBody]JObject data)
+        public async Task<IActionResult> UpdateTruck(int id, [FromBody]UpdateTruckViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             var userId = _caller.Claims.Single(c => c.Type == "id");
 
             var customer = await _context.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
 
             var truck = _context.Trucks.Find(id);
-            if(truck.Created_by != customer)
+
+            if (truck == null)
             {
-                //todo: Return unauthorized access
                 return NotFound();
+            }
+
+            if (truck.Created_by != customer)
+            {
+
+                return StatusCode(401, "Update not allowed on this truck");
             }
 
             var old_hours = truck.Hours;
             var old_location = truck.Location;
-            String hours = data["hours"].ToString();
-            Address location = data["location"].ToObject<Address>();
+            String hours = model.Hours;
+            Address location = model.Location;
             truck.Hours = hours;
             truck.Location = location;
             _context.SaveChanges();
@@ -206,23 +231,19 @@ namespace Levvel_backend_project.Controllers
 
             var customer = await _context.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
 
-           
-
             var truckItem = await _context.Trucks.FindAsync(id);
 
             if (truckItem == null)
             {
+
                 return NotFound();
             }
 
-           
             if (truckItem.Created_by != customer)
             {
                 //todo: Return unauthorized access
-                return NotFound();
+                return StatusCode(401, "Delete not allowed on this truck");
             }
-
-
 
             var truckId = truckItem.TruckId;
             _context.Trucks.Remove(truckItem);
@@ -233,13 +254,12 @@ namespace Levvel_backend_project.Controllers
                 TruckId = id,
                 TypeOfOperation = "DELETE",
                 Timestamp = DateTime.Now,
- 
             };
 
             _context.Audits.Add(audit);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok();
         }
     }
 }
