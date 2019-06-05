@@ -11,7 +11,6 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-
 using System.Net;
 using AutoMapper.Configuration;
 using Newtonsoft.Json;
@@ -258,21 +257,6 @@ namespace Levvel_backend_project.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
-        }
-
-        public string GetPrice(int price)
-        {
-            switch (price)
-            {
-                case 1:
-                    return "$";
-                case 2:
-                    return "$$";
-                case 3:
-                    return "$$$";
-                default:
-                    return "$$$$";
-            }
         }
     }
 }

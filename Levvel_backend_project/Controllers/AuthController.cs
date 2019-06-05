@@ -39,7 +39,6 @@ namespace Levvel_backend_project.Controllers
             var identity = await GetClaimsIdentity(credentials.UserName, credentials.Password);
             if (identity == null)
             {
-                //return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
                 return NotFound();
             }
 

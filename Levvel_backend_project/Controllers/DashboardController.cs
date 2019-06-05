@@ -49,32 +49,21 @@ namespace Levvel_backend_project.Controllers
 
             var nc = _mapper.Map<List<TruckViewModel>>(favorites);
 
-            var response = favorites.Select(u => new
-            {
-                id = u.TruckId,
-                title = u.Title,
-                price = u.Price,
-                rating = u.Rating,
-                hours = u.Hours,
-                phone = u.Phone,
 
-                categories = u.TruckCategory.Select(p => p.Category).Select(
-                    p => new
-                    {
-                        name = p.CategoryName
-                    }),
-                coordinates = u.Coordinates,
-                location = u.Location
+            var response = favorites.Select(u => new TruckViewModel
+            {
+                TruckId = u.TruckId,
+                Title = u.Title,
+                Price = u.Price,
+                Rating = u.Rating,
+                Hours = u.Hours,
+                Phone = u.Phone,
+                Categories = _mapper.Map<List<Category>, List<CategoryViewModel>>(u.TruckCategory.Select(p => p.Category).ToList()),
+                Coordinates = u.Coordinates,
+                Location = u.Location
             });
 
-            var cs = _mapper.Map<CustomerViewModel>(customer);
-            return new OkObjectResult(new
-            {
-                customer.Id,
-                customer.Identity.FirstName,
-                customer.Identity.LastName,
-                favorites = response
-            });
+            return Ok(response.ToList());
         }
 
 
@@ -87,6 +76,10 @@ namespace Levvel_backend_project.Controllers
           
             var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
             Truck truck = _appDbContext.Trucks.Find(model.TruckId);
+            if(truck == null)
+            {
+                return NotFound();
+            }
             
             _appDbContext.CustomerTrucks.Add(new CustomerTrucks
             {
@@ -96,19 +89,13 @@ namespace Levvel_backend_project.Controllers
             });
             await _appDbContext.SaveChangesAsync();
 
-            var resp = new
-            {
-                UserId = customer.Id,
-                TruckId = truck.TruckId,
-
-            };
-            return Ok(resp);
+            return Ok();
         }
 
 
-        // GET api/dashboard/favorites
+        // GET api/dashboard/trucks
         [HttpGet("trucks")]
-        public async Task<IActionResult> getTrucks()
+        public async Task<IActionResult> GetTrucks()
         {
             // retrieve the user info
             //HttpContext.User
@@ -121,35 +108,20 @@ namespace Levvel_backend_project.Controllers
             .Where(ci => ci.Created_by == customer);
 
 
-            var response = trucks.Select(u => new
+            var response = trucks.Select(u => new TruckViewModel
             {
-                id = u.TruckId,
-                title = u.Title,
-                price = u.Price,
-                rating = u.Rating,
-                hours = u.Hours,
-                phone = u.Phone,
-
-                categories = u.TruckCategory.Select(p => p.Category).Select(
-                    p => new
-                    {
-                        name = p.CategoryName
-                    }),
-                coordinates = u.Coordinates,
-                location = u.Location
+                TruckId = u.TruckId,
+                Title = u.Title,
+                Price = u.Price,
+                Rating = u.Rating,
+                Hours = u.Hours,
+                Phone = u.Phone,
+                Categories = _mapper.Map<List<Category>, List<CategoryViewModel>>(u.TruckCategory.Select(p => p.Category).ToList()),
+                Coordinates = u.Coordinates,
+                Location = u.Location
             });
 
-            var cs = _mapper.Map<CustomerViewModel>(customer);
-            return new OkObjectResult(new
-            {
-                customer.Id,
-                customer.Identity.FirstName,
-                customer.Identity.LastName,
-                trucks = response
-            });
+            return Ok(response.ToList());
         }
-
-
-
     }
 }
