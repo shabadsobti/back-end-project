@@ -11,16 +11,20 @@ using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+
 using System.Net;
+using AutoMapper.Configuration;
+using Newtonsoft.Json;
 
 namespace Levvel_backend_project.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
+   
     public class TruckController : ControllerBase
     {
-        private ApiContext _context;
+        private readonly ApiContext _context;
         private readonly ClaimsPrincipal _caller;
         private readonly IMapper _mapper;
         public TruckController(ApiContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
@@ -31,32 +35,28 @@ namespace Levvel_backend_project.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public ActionResult Get()
         {
             var trucks = _context.Trucks.Include(u => u.TruckCategory);
-            var response = trucks.Select(u => new
+            var response = trucks.Select(u => new TruckViewModel
             {
-                id = u.TruckId,
-                title = u.Title,
-                price = u.Price,
-                rating = u.Rating,
-                hours = u.Hours,
-                phone = u.Phone,
-
-                categories = u.TruckCategory.Select(p => p.Category).Select(
-                    p => new
-                    {
-                        name = p.CategoryName
-                    }),
-                coordinates = u.Coordinates,
-                location = u.Location
-
+                TruckId = u.TruckId,
+                Title = u.Title,
+                Price = u.Price,
+                Rating = u.Rating,
+                Hours = u.Hours,
+                Phone = u.Phone,
+                Categories = _mapper.Map<List<Category>, List<CategoryViewModel>> (u.TruckCategory.Select(p => p.Category).ToList()),
+                Coordinates = u.Coordinates,
+                Location = u.Location
             });
-            return Ok(response);
+
+            return Ok(response.ToList());
+
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public ActionResult Get(int id)
         {
             var t = _context.Trucks.Include(u => u.TruckCategory).ToList();
             List<string> category_names = new List<string>();
@@ -75,49 +75,46 @@ namespace Levvel_backend_project.Controllers
             {
                 return NotFound();
             }
-            var resp = new
+            var resp = new TruckViewModel
             {
-                id = truck.TruckId,
-                title = truck.Title,
-                price = truck.Price,
-                rating = truck.Rating,
-                hours = truck.Hours,
-                phone = truck.Phone,
-                categories = category_names,
-                coordinates = truck.Coordinates,
-                location = truck.Location
+                TruckId = truck.TruckId,
+                Title = truck.Title,
+                Price = truck.Price,
+                Rating = truck.Rating,
+                Hours = truck.Hours,
+                Phone = truck.Phone,
+                Categories = _mapper.Map<List<Category>, List<CategoryViewModel>>(truck.TruckCategory.Select(p => p.Category).ToList()),
+                Coordinates = truck.Coordinates,
+                Location = truck.Location
 
             };
             return Ok(resp);
         }
 
+
         [HttpGet("search")]
-        public IActionResult GetByQuery(int price, decimal rating, string category)
+        public ActionResult GetByQuery(string price, decimal rating, string category)
         {
             var trucks = _context.Trucks.Include(u => u.TruckCategory)
                 .Where(p => p.Price == price)
-                .Where(r => r.Rating == rating)
+                .Where(r => r.Rating >= rating)
                 .Where(x => x.TruckCategory
                 .Any(r => r.Category.CategoryName.Equals(category)));
 
-            var response = trucks.Select(u => new
+            var response = trucks.Select(u => new TruckViewModel
             {
-                id = u.TruckId,
-                title = u.Title,
-                price = u.Price,
-                rating = u.Rating,
-                hours = u.Hours,
-                phone = u.Phone,
-
-                categories = u.TruckCategory.Select(p => p.Category).Select(
-                    p => new
-                    {
-                        name = p.CategoryName
-                    }),
-                coordinates = u.Coordinates,
-                location = u.Location
+                TruckId = u.TruckId,
+                Title = u.Title,
+                Price = u.Price,
+                Rating = u.Rating,
+                Hours = u.Hours,
+                Phone = u.Phone,
+                Categories = _mapper.Map<List<Category>, List<CategoryViewModel>>(u.TruckCategory.Select(p => p.Category).ToList()),
+                Coordinates = u.Coordinates,
+                Location = u.Location
             });
-            return Ok(response);
+
+            return Ok(response.ToList());
         }
 
         [Authorize(Policy = "ApiUser")]
@@ -144,17 +141,18 @@ namespace Levvel_backend_project.Controllers
                 };
                 _context.Audits.Add(audit);
                 await _context.SaveChangesAsync();
-                var resp = new
+
+                var resp = new TruckViewModel
                 {
-                    id = truck.TruckId,
-                    title = truck.Title,
-                    price = truck.Price,
-                    rating = truck.Rating,
-                    hours = truck.Hours,
-                    phone = truck.Phone,
-                    categories = model.Categories,
-                    coordinates = truck.Coordinates,
-                    location = truck.Location
+                    TruckId = truck.TruckId,
+                    Title = truck.Title,
+                    Price = truck.Price,
+                    Rating = truck.Rating,
+                    Hours = truck.Hours,
+                    Phone = truck.Phone,
+                    Categories = _mapper.Map<List<Category>, List<CategoryViewModel>>(truck.TruckCategory.Select(p => p.Category).ToList()),
+                    Coordinates = truck.Coordinates,
+                    Location = truck.Location
 
                 };
                 return Ok(resp);
@@ -260,6 +258,21 @@ namespace Levvel_backend_project.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        public string GetPrice(int price)
+        {
+            switch (price)
+            {
+                case 1:
+                    return "$";
+                case 2:
+                    return "$$";
+                case 3:
+                    return "$$$";
+                default:
+                    return "$$$$";
+            }
         }
     }
 }

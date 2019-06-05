@@ -11,7 +11,9 @@ namespace Levvel_backend_project.ViewModels
         [Required]
         public string Title { get; set; }
         [Required]
-        public int Price { get; set; }
+        // \${1,4}
+        [RegularExpression("^(\\${1,4})$", ErrorMessage = "Price needs to be between $ and $$$$")]
+        public string Price { get; set; }
         [Range(1, 5)]
         public decimal Rating { get; set; }
         [Required]

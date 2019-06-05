@@ -14,6 +14,11 @@ namespace Levvel_backend_project
             .ForMember(d => d.CategoryName, opt => opt.MapFrom(c => c.Category.CategoryName));
 
 
+
+            CreateMap<Category, CategoryViewModel>()
+            .ForMember(d => d.CategoryName, opt => opt.MapFrom(c => c.CategoryName));
+
+
             CreateMap<CategoryViewModel, TruckCategory>()
             .ForMember(d => d.CategoryId, opt => opt.Ignore())
             .ForMember(d => d.Category, opt => opt.Ignore())

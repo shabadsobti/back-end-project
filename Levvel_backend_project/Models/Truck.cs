@@ -9,7 +9,7 @@ namespace Levvel_backend_project.Models
     {
         public int TruckId { get; set; }
         public string Title { get; set; }
-        public int Price { get; set; }
+        public string Price { get; set; }
         [Range(1, 5)]
         public decimal Rating { get; set; }
         public string Hours { get; set; }

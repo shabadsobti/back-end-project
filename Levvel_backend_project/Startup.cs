@@ -28,6 +28,7 @@ using Levvel_backend_project.Models;
 
 using Levvel_backend_project.Helpers;
 using Levvel_backend_project.Auth;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Levvel_backend_project
 {
@@ -63,7 +64,7 @@ namespace Levvel_backend_project
                 options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
                 options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
             });
-
+          
 
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -113,7 +114,9 @@ namespace Levvel_backend_project
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().AddXmlDataContractSerializerFormatters().AddJsonOptions(opt => {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -129,6 +132,7 @@ namespace Levvel_backend_project
                 app.UseHsts();
             }
 
+         
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();

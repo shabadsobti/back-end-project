@@ -23,7 +23,7 @@ namespace Levvel_backend_project
                 {
                     //TruckId = 1,
                     Title = "Candy Land",
-                    Price = 1,
+                    Price = "$",
                     Rating = 3.4m,
                     Hours = "9:00,10:00,12:00,13:00",
                     Phone = "4344664943",
@@ -47,7 +47,7 @@ namespace Levvel_backend_project
                 {
                     //TruckId = 2,
                     Title = "Best Truck",
-                    Price = 1,
+                    Price = "$",
                     Rating = 3.4m,
                     Hours = "9:00,10:00,12:00,13:00",
                     Phone = "4344664943",
