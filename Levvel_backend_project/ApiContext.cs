@@ -20,9 +20,9 @@ namespace Levvel_backend_project
         public DbSet<Audit> Audits { get; set; }
 
 
-        //Host=localhost;Port=5432;Database=food_truck;Username=postgres;Password=Shabad@97
+        //
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    => optionsBuilder.UseNpgsql("Server=levvel.postgres.database.azure.com;Database=food_truck;Port=5432;User Id=shabad@levvel;Password=Singh@97;Ssl Mode=Require;");
+    => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=food_truck;Username=postgres;Password=Shabad@97");
 
 
         protected override void OnModelCreating(ModelBuilder builder)
