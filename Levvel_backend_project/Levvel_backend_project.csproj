@@ -37,5 +37,6 @@
     <Compile Remove="Models\CustomerViewModel.cs" />
     <Compile Remove="Models\FavoriteViewModel.cs" />
     <Compile Remove="Models\RegistrationViewModel.cs" />
+    <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 namespace Levvel_backend_project.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("api/trucks")]
     [ApiController]
    
     public class TruckController : ControllerBase
