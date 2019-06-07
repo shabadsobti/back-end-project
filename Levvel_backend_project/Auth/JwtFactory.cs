@@ -1,6 +1,5 @@
 ﻿using System;
 using Levvel_backend_project.Models;
-using Levvel_backend_project.Auth;
 using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

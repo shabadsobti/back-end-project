@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Levvel_backend_project.Models;
 
 namespace Levvel_backend_project.ViewModels

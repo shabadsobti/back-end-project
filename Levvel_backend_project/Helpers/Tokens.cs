@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Levvel_backend_project.Auth;
 using Levvel_backend_project.Models;
-using Levvel_backend_project.ViewModels;
 using Newtonsoft.Json;
 
 namespace Levvel_backend_project.Helpers

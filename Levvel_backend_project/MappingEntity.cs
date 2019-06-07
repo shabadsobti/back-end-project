@@ -13,11 +13,8 @@ namespace Levvel_backend_project
             CreateMap<TruckCategory, CategoryViewModel>()
             .ForMember(d => d.CategoryName, opt => opt.MapFrom(c => c.Category.CategoryName));
 
-
-
             CreateMap<Category, CategoryViewModel>()
             .ForMember(d => d.CategoryName, opt => opt.MapFrom(c => c.CategoryName));
-
 
             CreateMap<CategoryViewModel, TruckCategory>()
             .ForMember(d => d.CategoryId, opt => opt.Ignore())
@@ -39,19 +36,13 @@ namespace Levvel_backend_project
                 .ForMember(dto => dto.Title, opt => opt.MapFrom(x => x.Title))
                 .ForMember(dto => dto.Coordinates, opt => opt.MapFrom(x => x.Coordinates));
 
-
-
             CreateMap<RegistrationViewModel, AppUser>().ForMember(au => au.UserName, map => map.MapFrom(vm => vm.Email));
-
 
             CreateMap<CustomerTrucks, TruckViewModel>()
                 .ForMember(d => d.Title, opt => opt.MapFrom(c => c.Truck.Title));
-
-           
+                
             CreateMap<Customer, CustomerViewModel>();
             CreateMap<CustomerViewModel, Customer>();
-               
-
 
         }
     }

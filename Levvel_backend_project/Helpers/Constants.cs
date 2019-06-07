@@ -1,5 +1,4 @@
-﻿using System;
-namespace Levvel_backend_project.Helpers
+﻿namespace Levvel_backend_project.Helpers
 {
     public class Constants
     {

@@ -18,7 +18,6 @@ namespace Levvel_backend_project.Models
         public Address Location { get; set; }
         public Customer Created_by { get; set; }
 
-
         public virtual ICollection<TruckCategory> TruckCategory { get; set; }
         public IList<CustomerTrucks> CustomerTrucks { get; set; }
     }

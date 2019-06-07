@@ -1,5 +1,4 @@
-﻿using System;
-namespace Levvel_backend_project.ViewModels
+﻿namespace Levvel_backend_project.ViewModels
 {
     public class CategoryViewModel
     {

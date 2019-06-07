@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Levvel_backend_project.Models;
 using Levvel_backend_project.ViewModels;
@@ -37,7 +36,10 @@ namespace Levvel_backend_project.Controllers
 
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
 
-            //if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            if (!result.Succeeded)
+            {
+                return StatusCode(500, "A user with the same email exists.");
+            } 
 
             await _context.Customers.AddAsync(new Customer { IdentityId = userIdentity.Id });
             await _context.SaveChangesAsync();

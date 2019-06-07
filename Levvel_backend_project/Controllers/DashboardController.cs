@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,8 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 
 namespace Levvel_backend_project.Controllers
 {
@@ -37,8 +35,6 @@ namespace Levvel_backend_project.Controllers
         public async Task<IActionResult> Favorites()
         {
             // retrieve the user info
-            //HttpContext.User
-
             var userId = _caller.Claims.Single(c => c.Type == "id");
 
             var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);
@@ -98,8 +94,6 @@ namespace Levvel_backend_project.Controllers
         public async Task<IActionResult> GetTrucks()
         {
             // retrieve the user info
-            //HttpContext.User
-
             var userId = _caller.Claims.Single(c => c.Type == "id");
 
             var customer = await _appDbContext.Customers.Include(c => c.Identity).SingleAsync(c => c.Identity.Id == userId.Value);

@@ -13,7 +13,7 @@ namespace Levvel_backend_project
             using (var context = new ApiContext(
             serviceProvider.GetRequiredService<DbContextOptions<ApiContext>>()))
             {
-                // Look for any board games.
+               
                 if (context.Trucks.Any())
                 {
                     return;   // Data was already seeded

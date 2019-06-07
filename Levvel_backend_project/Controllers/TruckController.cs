@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Levvel_backend_project.ViewModels;
-using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using System.Net;
-using AutoMapper.Configuration;
-using Newtonsoft.Json;
 
 namespace Levvel_backend_project.Controllers
 {
@@ -51,7 +47,6 @@ namespace Levvel_backend_project.Controllers
             });
 
             return Ok(response.ToList());
-
         }
 
         [HttpGet("{id}")]
@@ -61,7 +56,7 @@ namespace Levvel_backend_project.Controllers
             List<string> category_names = new List<string>();
             var truck_categories = _context.TruckCategories
                 .Where(a => a.TruckId == id);
-            foreach (var tc in truck_categories) // query executed and data obtained from database
+            foreach (var tc in truck_categories)
             {
                 int catId = tc.CategoryId;
                 Category c = _context.Categories.Find(catId);
@@ -90,7 +85,7 @@ namespace Levvel_backend_project.Controllers
             return Ok(resp);
         }
 
-
+        // POST: api/trucks/search?price=$$&rating=2.3&category=Indian
         [HttpGet("search")]
         public ActionResult GetByQuery(string price, decimal rating, string category)
         {
@@ -116,6 +111,7 @@ namespace Levvel_backend_project.Controllers
             return Ok(response.ToList());
         }
 
+        // POST: api/trucks/
         [Authorize(Policy = "ApiUser")]
         [HttpPost]
         public async Task<IActionResult> CreateTruck(TruckViewModel model)
@@ -156,14 +152,11 @@ namespace Levvel_backend_project.Controllers
                 };
                 return Ok(resp);
             }
-            else
-            {
-                return NotFound();
-            }
 
-
+            return NotFound();
         }
 
+        // PUT: api/trucks/5
         [Authorize(Policy = "ApiUser")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTruck(int id, [FromBody]UpdateTruckViewModel model)
@@ -213,13 +206,11 @@ namespace Levvel_backend_project.Controllers
 
             _context.Audits.Add(audit);
             await _context.SaveChangesAsync();
-
-
             return Ok();
         }
 
 
-        // DELETE: api/Truck/5
+        // DELETE: api/trucks/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(int id)
         {
@@ -238,7 +229,6 @@ namespace Levvel_backend_project.Controllers
 
             if (truckItem.Created_by != customer)
             {
-                //todo: Return unauthorized access
                 return StatusCode(401, "Delete not allowed on this truck");
             }
 
