@@ -18,7 +18,6 @@ namespace Levvel_backend_project
         public DbSet<Audit> Audits { get; set; }
 
 
-     
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
           => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=food_truck;Username=postgres;Password=Shabad@97");
 
