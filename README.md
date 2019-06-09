@@ -5,12 +5,13 @@ The table of contents of the API documentation is as follows:
 2. [Trucks](#Trucks)
     1. [Get all Trucks](#Get-All-Trucks)
     2. [Get Truck by ID](#Get-Truck-by-ID)
-    3. [Create a Truck](#Create-a-Truck)
-    4. [Update a Truck](#Update-a-Truck)
-    5. [Delete a Truck](#Delete-a-Truck)
+    3. [Search Trucks](#Search-Trucks)
+    4. [Create a Truck](#Create-a-Truck)
+    5. [Update a Truck](#Update-a-Truck)
+    6. [Delete a Truck](#Delete-a-Truck)
 3. [Dashboard](#Dashboard)
     1. [Get all Favorites](#Get-All-Favorites)
-    2. [Add Favorite](#Add-Favorites)
+    2. [Add Favorite](#Add-Favorite)
     3. [Get your Trucks](#Get-your-Trucks)
 
 
@@ -31,14 +32,15 @@ The table of contents of the API documentation is as follows:
 *  **URL Params**
     None
 * **Data Params**
-    ```json
-   {
-      "email": "shabadsobti@gmail.com",
-      "password": "Shabad@97",
-      "firstName": "Shabad",
-      "lastName": "Sobti"
-  }
-     ```
+    * **Request Body**
+        ```json
+       {
+          "email": "shabadsobti@gmail.com",
+          "password": "Shabad@97",
+          "firstName": "Shabad",
+          "lastName": "Sobti"
+      }
+         ```
 
 * **Authentication Required**
   No
@@ -79,12 +81,13 @@ The table of contents of the API documentation is as follows:
 *  **URL Params**
     None
 * **Data Params**
-    ```json
-   {
-      "userName": "shabadsobti@gmail.com",
-      "password": "Shabad@97",
-  }
-     ```
+    * **Request Body**
+        ```json
+       {
+          "userName": "shabadsobti@gmail.com",
+          "password": "Shabad@97",
+      }
+         ```
 
 * **Authentication Required**
   No
@@ -117,9 +120,10 @@ The table of contents of the API documentation is as follows:
 ---
 1. [Get all Trucks](#Get-All-Trucks)
 2. [Get Truck by ID](#Get-Truck-by-ID)
-3. [Create a Truck](#Create-a-Truck)
-4. [Update a Truck](#Update-a-Truck)
-5. [Delete a Truck](#Delete-a-Truck)
+3. [Search Trucks](#Search-Trucks)
+4. [Create a Truck](#Create-a-Truck)
+5. [Update a Truck](#Update-a-Truck)
+6. [Delete a Truck](#Delete-a-Truck)
 
 **Get All Trucks**
 ----
@@ -209,10 +213,12 @@ The table of contents of the API documentation is as follows:
   /api/trucks/{ID}
 * **Method:**
   `GET`
-*  **URL Params**
-    None
+
 * **Data Params**
-  None
+    *  **URL Params**
+        | Parameter | Value   | Description |
+        |-----------|---------|-------------|
+        | ID        | Integer | Truck ID    |
 * **Success Response:**
   * **Code:** 200 
   *  **Content:**
@@ -254,44 +260,105 @@ The table of contents of the API documentation is as follows:
     curl -X GET http://levvel.azurewebsites.net/api/trucks/1
   ```
   
+**Search Trucks**
+----
+  Returns json/xml data about all the trucks matching the search criteria.
+
+* **URL**
+  /api/trucks/search
+* **Method:**
+  `GET`
+
+* **Data Params**
+    *  **Query string parameters**
+        | Parameter | Value   | Description |
+        |-----------|---------|-------------|
+        | Price     | String   | The price category. ie. \$\$\$\$,\$\$\$,\$\$,\$    |
+        | Rating    | Decimal | The minimum rating. ie. Find all trucks above this rating  |
+        | Category | String  | The category of food the truck serves    |
+* **Success Response:**
+  * **Code:** 200 
+  *  **Content:**
+      ```json
+        [
+            {
+            "truckId": 1,
+            "title": "Gyro Truck",
+            "price": "$$",
+            "rating": 2.3,
+            "hours": "1;00",
+            "phone": "4344664943",
+            "coordinates": {
+                "latitude": 123,
+                "longitude": 34
+            },
+            "location": {
+                "street": "101 N Tryon St",
+                "city": "Charlotte",
+                "state": "NC",
+                "country": "USA",
+                "zip": "22903"
+            },
+            "categories": [
+                {
+                    "categoryName": "Afghan"
+                },
+                {
+                    "categoryName": "Indian"
+                }
+                ]
+            }
+        ]
+      ```
+
+
+
+* **Sample Call:**
+
+  ```shell
+    curl -X GET \
+  'http://levvel.azurewebsites.net/api/trucks/search?rating=2.0&price=$$&category=Indian' 
+  ```
   
+  
+
+
 **Create a Truck**
 ----
-  Returns json/xml data about all the trucks.
+  Create a Truck Resource.
 
 * **URL**
   /api/trucks/
 * **Method:**
   `POST`
-*  **URL Params**
-    None
 * **Data Params**
-    ```json
-    {
-        "title": "Pizza Truck",
-        "price": "$$$",
-        "rating":3.4,
-        "hours": "1;00",
-        "phone": "4344664943",
-        "coordinates": {
-        	"latitude": 123.0,
-        	"longitude": 34.0
-        },
-        "location":{
-        	"street": "109, Asiad Village",
-        	"city": "Delhi",
-        	"state": "DE",
-        	"country": "India",
-        	"zip": "110049"
-        },
-        "categories":[
-        	{
-        	"categoryName": "American"
-        	}
-        	]
-        
-    }
-     ```
+    * **Request Body**
+        ```json
+        {
+            "title": "Pizza Truck",
+            "price": "$$$",
+            "rating":3.4,
+            "hours": "1;00",
+            "phone": "4344664943",
+            "coordinates": {
+            	"latitude": 123.0,
+            	"longitude": 34.0
+            },
+            "location":{
+            	"street": "109, Asiad Village",
+            	"city": "Delhi",
+            	"state": "DE",
+            	"country": "India",
+            	"zip": "110049"
+            },
+            "categories":[
+            	{
+            	"categoryName": "American"
+            	}
+            	]
+            
+        }
+         ```
 
 
 * **Authentication Required**
@@ -372,21 +439,24 @@ The table of contents of the API documentation is as follows:
   /api/trucks/{ID}
 * **Method:**
   `PUT`
-*  **URL Params**
-    None
 * **Data Params**
-    ```json
-    {
-    "hours": "13:00,15:00",
-    "location":{
-    	"street": "7th St NW",
-    	"city": "Charlotte",
-    	"state": "VA",
-    	"country": "USA",
-    	"zip": "28205"
-    	}
-    }
-     ```
+    *  **URL Params**
+        | Parameter | Value   | Description |
+        |-----------|---------|-------------|
+        | ID        | Integer | Truck ID    |
+    * **Request Body**
+        ```json
+        {
+        "hours": "13:00,15:00",
+        "location":{
+        	"street": "7th St NW",
+        	"city": "Charlotte",
+        	"state": "VA",
+        	"country": "USA",
+        	"zip": "28205"
+        	}
+        }
+         ```
 
 
 * **Authentication Required**
@@ -424,8 +494,12 @@ The table of contents of the API documentation is as follows:
   /api/trucks/{ID}
 * **Method:**
   `DELETE`
-*  **URL Params**
-    Truck ID to delete
+*  **Data Params**
+    *  **URL Params**
+        | Parameter | Value   | Description |
+        |-----------|---------|-------------|
+        | ID        | Integer | ID of Truck to delete    |
+
 * **Authentication Required**
   Yes
 * **Success Response:**
@@ -446,20 +520,18 @@ The table of contents of the API documentation is as follows:
 ***Dashboard***
 ---
 1. [Get all Favorites](#Get-All-Favorites)
-2. [Add Favorite](#Add-Favorites)
+2. [Add Favorite](#Add-Favorite)
 3. [Get your Trucks](#Get-your-Trucks)
 
 
 **Get All Favorites**
 ----
   A list of all the trucks marked as favorite by the logged in user.
-
+  
 * **URL**
   /api/dashboard/favorites
 * **Method:**
   `GET`
-*  **URL Params**
-    None
 * **Data Params**
   None
 
@@ -521,14 +593,13 @@ The table of contents of the API documentation is as follows:
   /api/dashboard/favorites
 * **Method:**
   `POST`
-*  **URL Params**
-    None
 * **Data Params**
-    ```json
-   {
-      "truckId": 1
-  }
-     ```
+    * **Request Body**
+        ```json
+       {
+          "truckId": 1
+      }
+         ```
 
 * **Authentication Required**
   Yes
@@ -559,8 +630,6 @@ The table of contents of the API documentation is as follows:
   /api/dashboard/trucks
 * **Method:**
   `GET`
-*  **URL Params**
-    None
 * **Data Params**
   None
 
