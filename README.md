@@ -1,10 +1,117 @@
 The table of contents of the API documentation is as follows: 
 1. [Authentication](#Authentication)
+    1. [Register](#Register)
+    2. [Login](#Login)
 2. [Trucks](#Trucks)
+    1. [Get all Trucks](#Get-All-Trucks)
+    2. [Get Truck by ID](#Get-Truck-by-ID)
+    3. [Create a Truck](#Create-a-Truck)
+    4. [Update a Truck](#Update-a-Truck)
+    5. [Delete a Truck](#Delete-a-Truck)
 3. [Dashboard](#Dashboard)
+    1. [Get all Favorites](#Get-All-Favorites)
+    2. [Get your Trucks](#Get-your-Trucks)
 
 
+***Authentication***
+---
+1. [Register](#Register)
+2. [Login](#Login)
 
+
+**Register**
+----
+  Register as a user on the application
+
+* **URL**
+  /api/accounts/{ID}
+* **Method:**
+  `POST`
+*  **URL Params**
+    None
+* **Data Params**
+    ```json
+   {
+      "email": "shabadsobti@gmail.com",
+      "password": "Shabad@97",
+      "firstName": "Shabad",
+      "lastName": "Sobti"
+  }
+     ```
+
+* **Authentication Required**
+  No
+* **Success Response:**
+     *  **Code: 200**
+     *  **Content:**
+          ```json
+        Account created
+          ```
+
+
+* **Error Response:**
+* **Code: 500 Internal Server Error**
+
+* **Sample Call:**
+
+  ```shell
+    curl -X POST \
+      http://levvel.azurewebsites.net/api/accounts \
+      -H 'Content-Type: application/json' \
+      -d '{
+    	"email": "shabadsobti@gmail.com",
+    	"password": "Shabad@97",
+    	"firstName": "Shabad",
+    	"lastName": "Sobti"
+    }'
+  ```
+  
+ 
+**Login**
+----
+  Login to get Auth Token
+
+* **URL**
+  /api/auth/login
+* **Method:**
+  `POST`
+*  **URL Params**
+    None
+* **Data Params**
+    ```json
+   {
+      "userName": "shabadsobti@gmail.com",
+      "password": "Shabad@97",
+  }
+     ```
+
+* **Authentication Required**
+  No
+* **Success Response:**
+     *  **Code: 200 OK**
+     *  **Content:**
+          ```json
+        {
+              "id": "b604f163-456e-4c51-b891-2cfa8f0a1d71",
+              "auth_token": "{Your Token}",
+              "expires_in": 7200
+        }
+          ```
+* **Error Response:**
+**Code: 500 Internal Server Error**
+
+* **Sample Call:**
+
+  ```shell
+    curl -X POST \
+      http://levvel.azurewebsites.net/api/auth/login \
+      -H 'Content-Type: application/json' \
+      -d '{
+    	"userName": "shabadsobti96@gmail.com",
+    	"password": "Shabad@97",
+    }'
+  ```
+  
 ***Trucks***
 ---
 1. [Get all Trucks](#Get-All-Trucks)
