@@ -90,7 +90,7 @@ The table of contents of the API documentation is as follows:
   ```
   
   
-  **Get Truck by Id**
+**Get All Trucks**
 ----
   Returns json/xml data about all the trucks.
 
