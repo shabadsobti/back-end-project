@@ -216,6 +216,7 @@ The table of contents of the API documentation is as follows:
 
 * **Data Params**
     *  **URL Params**
+    
         | Parameter | Value   | Description |
         |-----------|---------|-------------|
         | ID        | Integer | Truck ID    |
@@ -271,6 +272,7 @@ The table of contents of the API documentation is as follows:
 
 * **Data Params**
     *  **Query string parameters**
+    
         | Parameter | Value   | Description |
         |-----------|---------|-------------|
         | Price     | String   | The price category. ie. \$\$\$\$,\$\$\$,\$\$,\$    |
@@ -441,6 +443,7 @@ The table of contents of the API documentation is as follows:
   `PUT`
 * **Data Params**
     *  **URL Params**
+    
         | Parameter | Value   | Description |
         |-----------|---------|-------------|
         | ID        | Integer | Truck ID    |
@@ -496,6 +499,7 @@ The table of contents of the API documentation is as follows:
   `DELETE`
 *  **Data Params**
     *  **URL Params**
+    
         | Parameter | Value   | Description |
         |-----------|---------|-------------|
         | ID        | Integer | ID of Truck to delete    |
