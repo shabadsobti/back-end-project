@@ -10,7 +10,8 @@ The table of contents of the API documentation is as follows:
     5. [Delete a Truck](#Delete-a-Truck)
 3. [Dashboard](#Dashboard)
     1. [Get all Favorites](#Get-All-Favorites)
-    2. [Get your Trucks](#Get-your-Trucks)
+    2. [Add Favorite](#Add-Favorites)
+    3. [Get your Trucks](#Get-your-Trucks)
 
 
 ***Authentication***
@@ -439,5 +440,222 @@ The table of contents of the API documentation is as follows:
       http://levvel.azurewebsites.net/api/truck/1 \
       -H 'Authorization: Bearer {Your Auth Token goes here}' \
       -H 'Content-Type: application/json' 
+  ```
+  
+  
+***Dashboard***
+---
+1. [Get all Favorites](#Get-All-Favorites)
+2. [Add Favorite](#Add-Favorites)
+3. [Get your Trucks](#Get-your-Trucks)
+
+
+**Get All Favorites**
+----
+  A list of all the trucks marked as favorite by the logged in user.
+
+* **URL**
+  /api/dashboard/favorites
+* **Method:**
+  `GET`
+*  **URL Params**
+    None
+* **Data Params**
+  None
+
+* **Authentication Required**
+  Yes
+* **Success Response:**
+     *  **Code: 200**
+     *  **Content:**
+          ```json
+        [
+            {
+                "truckId": 1,
+                "title": "Gyro Truck",
+                "price": "$$",
+                "rating": 2.3,
+                "hours": "1;00",
+                "phone": "4344664943",
+                "coordinates": {
+                    "latitude": 123,
+                    "longitude": 34
+                },
+                "location": {
+                    "street": "101 N Tryon St",
+                    "city": "Charlotte",
+                    "state": "NC",
+                    "country": "USA",
+                    "zip": "22903"
+                },
+                "categories": [
+                    {
+                        "categoryName": "Afghan"
+                    },
+                    {
+                        "categoryName": "Indian"
+                    }
+                ]
+            }
+        ]
+          ```
+
+
+* **Error Response:**
+    * **Code: 401 Unauthorized**
+
+* **Sample Call:**
+
+  ```shell
+    curl -X GET \
+      http://levvel.azurewebsites.net/api/dashboard/favorites \
+      -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzaGFiYWQuc29idGlAZ21haWwuY29tIiwianRpIjoiN2JhNzNjZGUtY2YwZS00YzQ0LWI5ZjItN2UxN2RhOGQxMTJhIiwiaWF0IjoxNTYwMTE2ODI4LCJyb2wiOiJhcGlfYWNjZXNzIiwiaWQiOiIzZTg4MmY4Yy02OTY2LTQzMTctYjcxZi1hOWFjMjNhZjkyYTIiLCJuYmYiOjE1NjAxMTY4MjcsImV4cCI6MTU2MDEyNDAyNywiaXNzIjoid2ViQXBpIiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAxLyJ9.bcJ3JfsB3iiH_JCNLHxNbiE44UvyqWXgWjxDd5IVFWE' 
+  ```
+  
+ 
+**Add Favorite**
+----
+  Mark a Truck as a Favorite
+
+* **URL**
+  /api/dashboard/favorites
+* **Method:**
+  `POST`
+*  **URL Params**
+    None
+* **Data Params**
+    ```json
+   {
+      "truckId": 1
+  }
+     ```
+
+* **Authentication Required**
+  Yes
+* **Success Response:**
+     *  **Code: 200 OK**
+
+* **Error Response:**
+**Code: 401 Unauthorized**
+
+* **Sample Call:**
+
+  ```shell
+    curl -X POST \
+      http://levvel.azurewebsites.net/api/dashboard/favorites \
+      -H 'Authorization: Bearer {Your Auth token goes here}' \
+      -H 'Content-Type: application/json' \
+      -d '{
+    	"truckId" : 1
+    }'
+  ```
+  
+  
+**Get your Trucks**
+----
+  Get all trucks created by the logged in user
+
+* **URL**
+  /api/dashboard/trucks
+* **Method:**
+  `GET`
+*  **URL Params**
+    None
+* **Data Params**
+  None
+
+* **Authentication Required**
+  Yes
+* **Success Response:**
+     *  **Code: 200 OK**
+     *  **Content:**
+          ```json
+        [
+            {
+                "truckId": 1,
+                "title": "Gyro Truck",
+                "price": "$$",
+                "rating": 2.3,
+                "hours": "1;00",
+                "phone": "4344664943",
+                "coordinates": {
+                    "latitude": 123,
+                    "longitude": 34
+                },
+                "location": {
+                    "street": "101 N Tryon St",
+                    "city": "Charlotte",
+                    "state": "NC",
+                    "country": "USA",
+                    "zip": "22903"
+                },
+                "categories": [
+                    {
+                        "categoryName": "Afghan"
+                    },
+                    {
+                        "categoryName": "Indian"
+                    }
+                ]
+            },
+            {
+                "truckId": 2,
+                "title": "Bagels Truck",
+                "price": "$$$",
+                "rating": 3.4,
+                "hours": "1;00",
+                "phone": "4344664943",
+                "coordinates": {
+                    "latitude": 123,
+                    "longitude": 34
+                },
+                "location": {
+                    "street": "109, Asiad Village",
+                    "city": "Delhi",
+                    "state": "DE",
+                    "country": "India",
+                    "zip": "110049"
+                },
+                "categories": [
+                    {
+                        "categoryName": "American"
+                    }
+                ]
+            },
+            {
+                "truckId": 3,
+                "title": "Pizza Truck",
+                "price": "$$$",
+                "rating": 3.4,
+                "hours": "1;00",
+                "phone": "4344664943",
+                "coordinates": {
+                    "latitude": 123,
+                    "longitude": 34
+                },
+                "location": {
+                    "street": "109, Asiad Village",
+                    "city": "Delhi",
+                    "state": "DE",
+                    "country": "India",
+                    "zip": "110049"
+                },
+                "categories": [
+                    {
+                        "categoryName": "American"
+                    }
+                ]
+            }
+        ]
+          ```
+* **Error Response:**
+**Code: 401 Unauthorized**
+
+* **Sample Call:**
+
+  ```shell
+    curl -X GET \
+  http://levvel.azurewebsites.net/api/dashboard/trucks \
+  -H 'Authorization: Bearer {Your Auth Token goes here}'
   ```
   
