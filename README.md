@@ -8,7 +8,7 @@ The table of contents of the API documentation is as follows:
 ***Trucks***
 ---
 1. [Get all Trucks](#Get-All-Trucks)
-2. [Get Truck by ID](#Get-Truck-by-Id)
+2. [Get Truck by ID](#Get-Truck-by-ID)
 
 **Get All Trucks**
 ----
@@ -90,7 +90,7 @@ The table of contents of the API documentation is as follows:
   ```
   
   
-**Get All Trucks**
+**Get Truck by ID**
 ----
   Returns json/xml data about all the trucks.
 
