@@ -1,3 +1,8 @@
+<p align="center">
+  <img width="240" src="https://www.cloudbees.com/sites/default/files/levveltaglinelogo1_0.png">
+</p>
+
+
 The table of contents of the API documentation is as follows: 
 1. [Authentication](#Authentication)
     1. [Register](#Register)
@@ -215,7 +220,7 @@ The table of contents of the API documentation is as follows:
   `GET`
 
 * **Data Params**
-    *  **URL Params**
+    *  **URL Path Params**
     
         | Parameter | Value   | Description |
         |-----------|---------|-------------|
@@ -442,7 +447,7 @@ The table of contents of the API documentation is as follows:
 * **Method:**
   `PUT`
 * **Data Params**
-    *  **URL Params**
+    *  **URL Path Params**
     
         | Parameter | Value   | Description |
         |-----------|---------|-------------|
@@ -498,7 +503,7 @@ The table of contents of the API documentation is as follows:
 * **Method:**
   `DELETE`
 *  **Data Params**
-    *  **URL Params**
+    *  **URL Path Params**
     
         | Parameter | Value   | Description |
         |-----------|---------|-------------|
