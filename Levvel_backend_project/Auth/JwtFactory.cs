@@ -7,7 +7,6 @@ using System.Security.Principal;
 using Microsoft.Extensions.Options;
 
 namespace Levvel_backend_project.Auth
-
 {
     public class JwtFactory : IJwtFactory
     {

@@ -87,13 +87,36 @@ namespace Levvel_backend_project.Controllers
 
         // POST: api/trucks/search?price=$$&rating=2.3&category=Indian
         [HttpGet("search")]
-        public ActionResult GetByQuery(string price, decimal rating, string category)
+        public ActionResult GetByQuery(string price = null, decimal rating = 0, string category = null)
         {
             var trucks = _context.Trucks.Include(u => u.TruckCategory)
                 .Where(p => p.Price == price)
                 .Where(r => r.Rating >= rating)
                 .Where(x => x.TruckCategory
                 .Any(r => r.Category.CategoryName.Equals(category)));
+
+
+            if (price == null)
+            {
+                trucks = _context.Trucks.Include(u => u.TruckCategory)
+                .Where(r => r.Rating >= rating)
+                .Where(x => x.TruckCategory
+                .Any(r => r.Category.CategoryName.Equals(category)));
+            }
+
+            else if (price == null && category == null)
+            {
+                trucks = _context.Trucks.Include(u => u.TruckCategory)
+                .Where(r => r.Rating >= rating);
+            }
+
+            else if(category == null)
+            {
+                trucks = _context.Trucks.Include(u => u.TruckCategory)
+                .Where(p => p.Price == price)
+                .Where(r => r.Rating >= rating);
+            }
+
 
             var response = trucks.Select(u => new TruckViewModel
             {
