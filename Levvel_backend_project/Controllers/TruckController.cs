@@ -96,18 +96,18 @@ namespace Levvel_backend_project.Controllers
                 .Any(r => r.Category.CategoryName.Equals(category)));
 
 
-            if (price == null)
+            if (price == null && category == null)
+            {
+                trucks = _context.Trucks.Include(u => u.TruckCategory)
+                .Where(r => r.Rating >= rating);
+            }
+
+            else if (price == null)
             {
                 trucks = _context.Trucks.Include(u => u.TruckCategory)
                 .Where(r => r.Rating >= rating)
                 .Where(x => x.TruckCategory
                 .Any(r => r.Category.CategoryName.Equals(category)));
-            }
-
-            else if (price == null && category == null)
-            {
-                trucks = _context.Trucks.Include(u => u.TruckCategory)
-                .Where(r => r.Rating >= rating);
             }
 
             else if(category == null)
