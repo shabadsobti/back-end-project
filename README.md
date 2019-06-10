@@ -2,9 +2,11 @@
   <img width="240" src="https://www.cloudbees.com/sites/default/files/levveltaglinelogo1_0.png">
 </p>
 
+The base URL of the API is http://levvel.azurewebsites.net/api/ 
 
 The table of contents of the API documentation is as follows: 
-1. [Authentication](#Authentication)
+1. [Authorization](#Authorization)
+    1. [Bearer Tokens](#Bearer-Tokens)
     1. [Register](#Register)
     2. [Login](#Login)
 2. [Trucks](#Trucks)
@@ -20,11 +22,27 @@ The table of contents of the API documentation is as follows:
     3. [Get your Trucks](#Get-your-Trucks)
 
 
-***Authentication***
+***Authorization***
 ---
-1. [Register](#Register)
-2. [Login](#Login)
+1. [Bearer Tokens](#Bearer-Tokens)
+2. [Register](#Register)
+3. [Login](#Login)
 
+**Bearer Tokens**
+----
+The API implements authorization/authentication using Bearer Tokens. Protected endpoints like the following require a Authorization header to be passed into the request: 
+
+  1. [Create a Truck](#Create-a-Truck)
+  2. [Update a Truck](#Update-a-Truck)
+  3. [Delete a Truck](#Delete-a-Truck)
+  4. [Get all Favorites](#Get-All-Favorites)
+  5. [Add Favorite](#Add-Favorite)
+  6. [Get your Trucks](#Get-your-Trucks)
+
+To generate a token, a user first needs to Register himself on the application, then can send a login request that would return a Bearer Token. The token needs to be passed into the header of the requests made to the protected endpoints in the format  - 
+  ```shell
+  Authorization: Bearer <Token>
+  ```
 
 **Register**
 ----
@@ -55,7 +73,11 @@ The table of contents of the API documentation is as follows:
           ```json
         Account created
           ```
-
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
 
 * **Error Response:**
 * **Code: 500 Internal Server Error**
@@ -106,6 +128,12 @@ The table of contents of the API documentation is as follows:
               "expires_in": 7200
         }
           ```
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
+    
 * **Error Response:**
 **Code: 500 Internal Server Error**
 
@@ -200,7 +228,11 @@ The table of contents of the API documentation is as follows:
         }
         ]
       ```
-
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
 
 
 * **Sample Call:**
@@ -258,7 +290,11 @@ The table of contents of the API documentation is as follows:
         }
       ```
 
-
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
 
 * **Sample Call:**
 
@@ -317,7 +353,11 @@ The table of contents of the API documentation is as follows:
             }
         ]
       ```
-
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
 
 
 * **Sample Call:**
@@ -403,7 +443,11 @@ The table of contents of the API documentation is as follows:
         }
       ```
 
-
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
 
 * **Sample Call:**
 
@@ -580,7 +624,11 @@ The table of contents of the API documentation is as follows:
             }
         ]
           ```
-
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
 
 * **Error Response:**
     * **Code: 401 Unauthorized**
@@ -726,6 +774,13 @@ The table of contents of the API documentation is as follows:
             }
         ]
           ```
+          
+    The API returns JSON by default. However an optional header value such as the following can be passed to force the API to     return XML: 
+    
+    ```shell
+    'Accept: application/xml'
+    ```
+    
 * **Error Response:**
 **Code: 401 Unauthorized**
 
