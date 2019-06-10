@@ -43,6 +43,7 @@ To generate a token, a user first needs to Register himself on the application, 
   ```shell
   Authorization: Bearer <Token>
   ```
+**Note:** The Bearer token has a life of 7200 seconds (2 hours), after which a new token will have to be generated. 
 
 **Register**
 ----
