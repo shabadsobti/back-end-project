@@ -81,7 +81,7 @@ To generate a token, a user first needs to Register himself on the application, 
     ```
 
 * **Error Response:**
-* **Code: 500 Internal Server Error**
+  * **Code: 500 Internal Server Error**
 
 * **Sample Call:**
 
@@ -113,7 +113,7 @@ To generate a token, a user first needs to Register himself on the application, 
         ```json
        {
           "userName": "shabadsobti@gmail.com",
-          "password": "Shabad@97",
+          "password": "Shabad@97"
       }
          ```
 
@@ -136,7 +136,7 @@ To generate a token, a user first needs to Register himself on the application, 
     ```
     
 * **Error Response:**
-**Code: 500 Internal Server Error**
+  *  **Code: 500 Internal Server Error**
 
 * **Sample Call:**
 
@@ -146,7 +146,7 @@ To generate a token, a user first needs to Register himself on the application, 
       -H 'Content-Type: application/json' \
       -d '{
     	"userName": "shabadsobti96@gmail.com",
-    	"password": "Shabad@97",
+    	"password": "Shabad@97"
     }'
   ```
   
@@ -296,7 +296,9 @@ To generate a token, a user first needs to Register himself on the application, 
     ```shell
     'Accept: application/xml'
     ```
-
+* **Error Response:**
+  * **Code: 404 Not Found**
+  
 * **Sample Call:**
 
   ```shell
@@ -449,7 +451,11 @@ To generate a token, a user first needs to Register himself on the application, 
     ```shell
     'Accept: application/xml'
     ```
-
+* **Error Response:**
+  * **Code: 401 Unauthorized**
+  * **Code: 400 Bad Request**
+  
+  
 * **Sample Call:**
 
   ```shell
@@ -518,7 +524,12 @@ To generate a token, a user first needs to Register himself on the application, 
 **Code: 200**
 
 * **Error Response:**
-**Code: 401 Unauthorized**
+  * **Code: 401 Unauthorized**
+  * **Code: 404 Not Found**
+  * **Code: 400 Bad Request**
+
+
+
 * **Sample Call:**
 
   ```shell
@@ -560,7 +571,9 @@ To generate a token, a user first needs to Register himself on the application, 
 **Code: 200**
 
 * **Error Response:**
-**Code: 401 Unauthorized**
+  * **Code: 401 Unauthorized**
+  * **Code: 404 Not Found**
+  
 * **Sample Call:**
 
   ```shell
@@ -630,9 +643,8 @@ To generate a token, a user first needs to Register himself on the application, 
     ```shell
     'Accept: application/xml'
     ```
-
 * **Error Response:**
-    * **Code: 401 Unauthorized**
+  * **Code: 401 Unauthorized**
 
 * **Sample Call:**
 
@@ -665,7 +677,8 @@ To generate a token, a user first needs to Register himself on the application, 
      *  **Code: 200 OK**
 
 * **Error Response:**
-**Code: 401 Unauthorized**
+  * **Code: 401 Unauthorized**
+  * **Code: 404 Not Found**
 
 * **Sample Call:**
 
@@ -783,7 +796,8 @@ To generate a token, a user first needs to Register himself on the application, 
     ```
     
 * **Error Response:**
-**Code: 401 Unauthorized**
+  * **Code: 401 Unauthorized**
+
 
 * **Sample Call:**
 
