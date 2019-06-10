@@ -49,7 +49,7 @@ To generate a token, a user first needs to Register himself on the application, 
   Register as a user on the application
 
 * **URL**
-  /api/accounts/{ID}
+  /api/accounts/
 * **Method:**
   `POST`
 *  **URL Params**
